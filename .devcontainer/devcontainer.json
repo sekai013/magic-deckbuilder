@@ -1,0 +1,31 @@
+{
+    "$schema": "https://raw.githubusercontent.com/devcontainers/spec/main/schemas/devContainer.schema.json",
+    "name": "devcontainer for magic-deckbuilder",
+    "image": "mcr.microsoft.com/devcontainers/base:ubuntu-22.04",
+    "features": {
+        "ghcr.io/devcontainers/features/desktop-lite": {},
+        "ghcr.io/devcontainers/features/rust": {
+            "version": "1.85.1"
+        },
+        "ghcr.io/devcontainers/features/node": {
+            "version": "22.14.0",
+            "pnpmVersion": "10.7.0"
+        }
+    },
+    "postCreateCommand": "/bin/sh .devcontainer/postCreateCommand.sh",
+    "forwardPorts": [ 6080 ],
+    "portsAttributes": {
+        "6080": {
+            "label": "desktop"
+        }
+    },
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "svelte.svelte-vscode",
+                "tauri-apps.tauri-vscode",
+                "rust-lang.rust-analyzer"
+            ]
+        }
+    }
+}
