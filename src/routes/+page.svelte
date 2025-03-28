@@ -1,4 +1,5 @@
 <script lang="ts">
+  import CardList from '../components/CardList.svelte';
   import Card from '../components/Card.svelte';
   import type { Card as CardType } from '$lib/types';
   
@@ -42,13 +43,12 @@
     <h2>Card Gallery</h2>
     <p>Browse through the collection of Magic: The Gathering cards.</p>
     
-    <div class="card-grid">
-      {#each cards as card (card.id)}
-        <div class="card-container">
-          <Card {card} />
-        </div>
-      {/each}
+    <div class="stats">
+      <p>Total Cards: {cards.length}</p>
+      <p>Selected Cards: {cards.filter(card => card.selected).length}</p>
     </div>
+    
+    <CardList cards={cards} />
   </section>
 </main>
 
@@ -90,16 +90,14 @@
     margin-bottom: 3rem;
   }
   
-  .card-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-    gap: 1.5rem;
-    margin-top: 1.5rem;
-  }
-  
-  .card-container {
+  .stats {
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
+    margin: 1rem 0;
+    background-color: #f0f0f0;
+    padding: 0.75rem 1.5rem;
+    border-radius: 8px;
+    font-weight: 500;
   }
   
   @media (max-width: 768px) {
@@ -123,6 +121,11 @@
     }
     
     h1, h2 {
+      color: #f0f0f0;
+    }
+    
+    .stats {
+      background-color: #3a3a3a;
       color: #f0f0f0;
     }
   }
