@@ -1,4 +1,4 @@
-import { writable } from 'svelte/store';
+import { updateDeckCards } from '$lib/state.svelte';
 import type { Card } from '$lib/types';
 
 // Define the initial deck cards
@@ -57,11 +57,6 @@ const initialDeckCards: Card[] = [
   }
 ];
 
-// Create and export the deck cards store
-export const deckCards = writable<Card[]>(initialDeckCards);
-
-// In the future, this service could be expanded to include:
-// - Adding/removing cards from the deck
-// - Saving/loading decks
-// - Deck statistics
-// - etc.
+export async function loadDeckCards() {
+  updateDeckCards(initialDeckCards);
+}

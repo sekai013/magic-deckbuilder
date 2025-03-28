@@ -1,11 +1,31 @@
 <script lang="ts">
   import type { Card } from '$lib/types';
+  import { addCardToDeck } from '$lib/state.svelte';
 
   // Define props
   export let card: Card;
+
+  // Handle card click
+  async function handleCardClick() {
+    await addCardToDeck(card);
+  }
+
+  // Handle key press (for accessibility)
+  async function handleKeyPress(event: KeyboardEvent) {
+    if (event.key === 'Enter' || event.key === ' ') {
+      await addCardToDeck(card);
+    }
+  }
 </script>
 
-<div class="card" class:selected={card.selected}>
+<div 
+  class="card" 
+  class:selected={card.selected}
+  on:click={handleCardClick}
+  on:keydown={handleKeyPress}
+  role="button"
+  tabindex="0"
+>
   <div class="card-inner">
     <!-- Card image -->
     <div class="card-image-container">
@@ -33,11 +53,13 @@
     transition: transform 0.2s ease, box-shadow 0.2s ease;
     background-color: #000;
     user-select: none;
+    cursor: pointer; /* Add cursor pointer to indicate clickable */
   }
   
-  .card:hover {
+  .card:hover, .card:focus {
     transform: translateY(-5px) scale(1.02);
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    outline: none; /* Remove default focus outline */
   }
   
   .card.selected {
@@ -63,7 +85,7 @@
     transition: transform 0.3s ease;
   }
   
-  .card:hover .card-image {
+  .card:hover .card-image, .card:focus .card-image {
     transform: scale(1.05);
   }
   

@@ -1,24 +1,15 @@
 <script lang="ts">
   import DeckBuilder from '../components/DeckBuilder.svelte';
-  import { galleryCards } from '../services/GalleryCardService';
-  import { deckCards } from '../services/DeckCardService';
-  import type { Card } from '$lib/types';
-  
-  // Subscribe to the stores
-  let galleryCardsValue: Card[] = [];
-  let deckCardsValue: Card[] = [];
-  
-  galleryCards.subscribe(value => {
-    galleryCardsValue = value;
-  });
-  
-  deckCards.subscribe(value => {
-    deckCardsValue = value;
-  });
+  import { getDeckCards, getGalleryCards } from '$lib/state.svelte'
+  import { loadDeckCards } from '../adapters/deck/static.svelte';
+  import { loadGalleryCards } from '../adapters/gallery/static.svelte';
+
+  loadDeckCards();
+  loadGalleryCards();
 </script>
 
 <div class="app-container">
-  <DeckBuilder galleryCards={galleryCardsValue} deckCards={deckCardsValue} />
+  <DeckBuilder galleryCards={getGalleryCards()} deckCards={getDeckCards()} />
 </div>
 
 <style>

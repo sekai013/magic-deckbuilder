@@ -1,4 +1,4 @@
-import { writable } from 'svelte/store';
+import { updateGalleryCards } from '$lib/state.svelte';
 import type { Card } from '$lib/types';
 
 // Define the initial gallery cards
@@ -33,10 +33,6 @@ const initialGalleryCards: Card[] = [
   }
 ];
 
-// Create and export the gallery cards store
-export const galleryCards = writable<Card[]>(initialGalleryCards);
-
-// In the future, this service could be expanded to include:
-// - Loading gallery cards from an API
-// - Filtering gallery cards
-// - etc.
+export async function loadGalleryCards() {
+  updateGalleryCards(initialGalleryCards);
+}
