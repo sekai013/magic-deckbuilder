@@ -1,10 +1,9 @@
 <script lang="ts">
-  import CardList from '../components/CardList.svelte';
-  import DeckList from '../components/DeckList.svelte';
+  import DeckBuilder from '../components/DeckBuilder.svelte';
   import type { Card as CardType } from '$lib/types';
   
   // Sample card data
-  let cards = $state<CardType[]>([
+  let galleryCards = $state<CardType[]>([
     {
       id: '1',
       name: 'Black Lotus',
@@ -92,30 +91,9 @@
   ]);
 </script>
 
-<main class="container">
-  <h1>Magic: The Gathering Deckbuilder</h1>
-  
-  <div class="app-layout">
-    <section class="card-section">
-      <h2>Card Gallery</h2>
-      <p>Browse through the collection of Magic: The Gathering cards.</p>
-      
-      <div class="stats">
-        <p>Total Cards: {cards.length}</p>
-        <p>Selected Cards: {cards.filter(card => card.selected).length}</p>
-      </div>
-      
-      <CardList cards={cards} />
-    </section>
-    
-    <section class="deck-section">
-      <h2>Your Deck</h2>
-      <p>Cards you've added to your deck.</p>
-      
-      <DeckList cards={deckCards} />
-    </section>
-  </div>
-</main>
+<div class="app-container">
+  <DeckBuilder {galleryCards} {deckCards} />
+</div>
 
 <style>
   :root {
@@ -132,76 +110,15 @@
     -webkit-text-size-adjust: 100%;
   }
   
-  .container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 2rem;
-  }
-  
-  h1 {
-    font-size: 2.5rem;
-    margin-bottom: 2rem;
-    text-align: center;
-    color: #333;
-  }
-  
-  h2 {
-    font-size: 1.8rem;
-    margin-bottom: 1rem;
-    color: #444;
-  }
-  
-  .app-layout {
-    display: grid;
-    grid-template-columns: 1fr 300px;
-    gap: 2rem;
-  }
-  
-  .card-section {
-    margin-bottom: 3rem;
-  }
-  
-  .deck-section {
-    margin-bottom: 3rem;
-  }
-  
-  .stats {
-    display: flex;
-    justify-content: space-between;
-    margin: 1rem 0;
-    background-color: #f0f0f0;
-    padding: 0.75rem 1.5rem;
-    border-radius: 8px;
-    font-weight: 500;
-  }
-  
-  @media (max-width: 768px) {
-    .app-layout {
-      grid-template-columns: 1fr;
-    }
-    
-    .container {
-      padding: 1rem;
-    }
-    
-    h1 {
-      font-size: 2rem;
-    }
+  .app-container {
+    width: 100%;
+    min-height: 100vh;
   }
   
   @media (prefers-color-scheme: dark) {
     :root {
       color: #f6f6f6;
       background-color: #2f2f2f;
-    }
-    
-    h1, h2 {
-      color: #f0f0f0;
-    }
-    
-    .stats {
-      background-color: #3a3a3a;
-      color: #f0f0f0;
     }
   }
 </style>
