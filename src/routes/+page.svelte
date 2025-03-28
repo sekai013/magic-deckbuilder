@@ -1,98 +1,24 @@
 <script lang="ts">
   import DeckBuilder from '../components/DeckBuilder.svelte';
-  import type { Card as CardType } from '$lib/types';
+  import { galleryCards } from '../services/GalleryCardService';
+  import { deckCards } from '../services/DeckCardService';
+  import type { Card } from '$lib/types';
   
-  // Sample card data
-  let galleryCards = $state<CardType[]>([
-    {
-      id: '1',
-      name: 'Black Lotus',
-      manaCost: '{0}',
-      imageUrl: 'https://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=382866&type=card',
-      selected: false
-    },
-    {
-      id: '2',
-      name: 'Lightning Bolt',
-      manaCost: '{R}',
-      imageUrl: 'https://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=442125&type=card',
-      selected: false
-    },
-    {
-      id: '3',
-      name: 'Counterspell',
-      manaCost: '{U}{U}',
-      imageUrl: 'https://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=413585&type=card',
-      selected: false
-    },
-    {
-      id: '4',
-      name: 'Wrath of God',
-      manaCost: '{2}{W}{W}',
-      imageUrl: 'https://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=413580&type=card',
-      selected: false
-    }
-  ]);
+  // Subscribe to the stores
+  let galleryCardsValue: Card[] = [];
+  let deckCardsValue: Card[] = [];
   
-  // Sample deck cards with multiple copies
-  let deckCards = $state<CardType[]>([
-    // 4 copies of Lightning Bolt
-    {
-      id: '2',
-      name: 'Lightning Bolt',
-      manaCost: '{R}',
-      imageUrl: 'https://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=442125&type=card',
-      selected: false
-    },
-    {
-      id: '2',
-      name: 'Lightning Bolt',
-      manaCost: '{R}',
-      imageUrl: 'https://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=442125&type=card',
-      selected: false
-    },
-    {
-      id: '2',
-      name: 'Lightning Bolt',
-      manaCost: '{R}',
-      imageUrl: 'https://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=442125&type=card',
-      selected: false
-    },
-    {
-      id: '2',
-      name: 'Lightning Bolt',
-      manaCost: '{R}',
-      imageUrl: 'https://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=442125&type=card',
-      selected: false
-    },
-    // 2 copies of Counterspell
-    {
-      id: '3',
-      name: 'Counterspell',
-      manaCost: '{U}{U}',
-      imageUrl: 'https://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=413585&type=card',
-      selected: false
-    },
-    {
-      id: '3',
-      name: 'Counterspell',
-      manaCost: '{U}{U}',
-      imageUrl: 'https://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=413585&type=card',
-      selected: false
-    },
-    // 1 copy of Wrath of God
-    {
-      id: '4',
-      name: 'Wrath of God',
-      manaCost: '{2}{W}{W}',
-      imageUrl: 'https://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=413580&type=card',
-      selected: false
-    }
-  ]);
+  galleryCards.subscribe(value => {
+    galleryCardsValue = value;
+  });
+  
+  deckCards.subscribe(value => {
+    deckCardsValue = value;
+  });
 </script>
 
 <div class="app-container">
-  <DeckBuilder {galleryCards} {deckCards} />
+  <DeckBuilder galleryCards={galleryCardsValue} deckCards={deckCardsValue} />
 </div>
 
 <style>
