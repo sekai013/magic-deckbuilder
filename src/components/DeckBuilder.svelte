@@ -1,5 +1,5 @@
 <script lang="ts">
-  import CardList from './CardList.svelte';
+  import Gallery from './Gallery.svelte';
   import DeckList from './DeckList.svelte';
   import Filter from './Filter.svelte';
   import type { Card } from '$lib/types';
@@ -27,7 +27,7 @@
         <p>Selected Cards: {galleryCards.filter(card => card.selected).length}</p>
       </div>
       
-      <CardList cards={galleryCards} />
+      <Gallery cards={galleryCards} />
       
       <Filter bind:searchText />
     </section>
