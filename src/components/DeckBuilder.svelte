@@ -1,11 +1,15 @@
 <script lang="ts">
   import CardList from './CardList.svelte';
   import DeckList from './DeckList.svelte';
+  import Filter from './Filter.svelte';
   import type { Card } from '$lib/types';
 
   // Props
   export let galleryCards: Card[] = [];
   export let deckCards: Card[] = [];
+  
+  // Filter state
+  let searchText = '';
 </script>
 
 <div class="deck-builder">
@@ -24,6 +28,8 @@
       </div>
       
       <CardList cards={galleryCards} />
+      
+      <Filter bind:searchText />
     </section>
     
     <section class="deck-section">
