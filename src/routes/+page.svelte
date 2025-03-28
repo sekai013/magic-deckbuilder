@@ -1,6 +1,6 @@
 <script lang="ts">
   import CardList from '../components/CardList.svelte';
-  import Card from '../components/Card.svelte';
+  import DeckList from '../components/DeckList.svelte';
   import type { Card as CardType } from '$lib/types';
   
   // Sample card data
@@ -34,22 +34,87 @@
       selected: false
     }
   ]);
+  
+  // Sample deck cards with multiple copies
+  let deckCards = $state<CardType[]>([
+    // 4 copies of Lightning Bolt
+    {
+      id: '2',
+      name: 'Lightning Bolt',
+      manaCost: '{R}',
+      imageUrl: 'https://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=442125&type=card',
+      selected: false
+    },
+    {
+      id: '2',
+      name: 'Lightning Bolt',
+      manaCost: '{R}',
+      imageUrl: 'https://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=442125&type=card',
+      selected: false
+    },
+    {
+      id: '2',
+      name: 'Lightning Bolt',
+      manaCost: '{R}',
+      imageUrl: 'https://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=442125&type=card',
+      selected: false
+    },
+    {
+      id: '2',
+      name: 'Lightning Bolt',
+      manaCost: '{R}',
+      imageUrl: 'https://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=442125&type=card',
+      selected: false
+    },
+    // 2 copies of Counterspell
+    {
+      id: '3',
+      name: 'Counterspell',
+      manaCost: '{U}{U}',
+      imageUrl: 'https://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=413585&type=card',
+      selected: false
+    },
+    {
+      id: '3',
+      name: 'Counterspell',
+      manaCost: '{U}{U}',
+      imageUrl: 'https://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=413585&type=card',
+      selected: false
+    },
+    // 1 copy of Wrath of God
+    {
+      id: '4',
+      name: 'Wrath of God',
+      manaCost: '{2}{W}{W}',
+      imageUrl: 'https://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=413580&type=card',
+      selected: false
+    }
+  ]);
 </script>
 
 <main class="container">
   <h1>Magic: The Gathering Deckbuilder</h1>
   
-  <section class="card-section">
-    <h2>Card Gallery</h2>
-    <p>Browse through the collection of Magic: The Gathering cards.</p>
+  <div class="app-layout">
+    <section class="card-section">
+      <h2>Card Gallery</h2>
+      <p>Browse through the collection of Magic: The Gathering cards.</p>
+      
+      <div class="stats">
+        <p>Total Cards: {cards.length}</p>
+        <p>Selected Cards: {cards.filter(card => card.selected).length}</p>
+      </div>
+      
+      <CardList cards={cards} />
+    </section>
     
-    <div class="stats">
-      <p>Total Cards: {cards.length}</p>
-      <p>Selected Cards: {cards.filter(card => card.selected).length}</p>
-    </div>
-    
-    <CardList cards={cards} />
-  </section>
+    <section class="deck-section">
+      <h2>Your Deck</h2>
+      <p>Cards you've added to your deck.</p>
+      
+      <DeckList cards={deckCards} />
+    </section>
+  </div>
 </main>
 
 <style>
@@ -86,7 +151,17 @@
     color: #444;
   }
   
+  .app-layout {
+    display: grid;
+    grid-template-columns: 1fr 300px;
+    gap: 2rem;
+  }
+  
   .card-section {
+    margin-bottom: 3rem;
+  }
+  
+  .deck-section {
     margin-bottom: 3rem;
   }
   
@@ -101,8 +176,8 @@
   }
   
   @media (max-width: 768px) {
-    .card-grid {
-      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    .app-layout {
+      grid-template-columns: 1fr;
     }
     
     .container {
