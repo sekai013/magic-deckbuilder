@@ -5,6 +5,8 @@
   // Define props
   export let card: Card;
 
+  let component: HTMLDivElement;
+
   // Handle card click
   async function handleCardClick() {
     await addCardToDeck(card);
@@ -16,12 +18,18 @@
       await addCardToDeck(card);
     }
   }
+
+  function handleMouseLeave(event: MouseEvent) {
+    component.blur();
+  }
 </script>
 
 <div 
   class="card" 
   on:click={handleCardClick}
   on:keydown={handleKeyPress}
+  on:mouseleave={handleMouseLeave}
+  bind:this={component}
   role="button"
   tabindex="0"
 >
