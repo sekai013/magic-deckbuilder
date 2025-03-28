@@ -10,14 +10,12 @@ describe('State', () => {
       name: 'Black Lotus',
       manaCost: '{0}',
       imageUrl: 'https://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=382866&type=card',
-      selected: false
     },
     {
       id: '2',
       name: 'Lightning Bolt',
       manaCost: '{R}',
       imageUrl: 'https://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=442125&type=card',
-      selected: false
     }
   ];
 
@@ -27,21 +25,18 @@ describe('State', () => {
       name: 'Lightning Bolt',
       manaCost: '{R}',
       imageUrl: 'https://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=442125&type=card',
-      selected: false
     },
     {
       id: '3',
       name: 'Counterspell',
       manaCost: '{U}{U}',
       imageUrl: 'https://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=413585&type=card',
-      selected: false
     },
     {
       id: '4',
       name: 'Wrath of God',
       manaCost: '{2}{W}{W}',
       imageUrl: 'https://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=413580&type=card',
-      selected: false
     }
   ];
 
@@ -50,7 +45,6 @@ describe('State', () => {
     name: 'Test Card',
     manaCost: '{1}{R}',
     imageUrl: 'https://example.com/test-card.jpg',
-    selected: false
   };
 
   // Save original state to restore after tests
@@ -72,7 +66,6 @@ describe('State', () => {
     // Reset gallery cards to initial state
     updateGalleryCards(initialGalleryCards.map((card: Card) => ({
       ...card,
-      selected: false
     })));
     
     // Reset deck cards to initial state
@@ -265,12 +258,6 @@ describe('State', () => {
       // Get the card from the gallery and the deck
       const galleryCard = getGalleryCards().find(card => card.id === '1');
       const deckCard = getDeckCards()[0];
-      
-      // Modify the deck card
-      deckCard.selected = true;
-      
-      // Verify the gallery card is unchanged
-      expect(galleryCard?.selected).toBe(false);
     });
 
     it('should do nothing if null is passed', async () => {

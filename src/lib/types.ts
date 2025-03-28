@@ -6,5 +6,4 @@ export interface Card {
   name: string;       // Card name
   manaCost: string;   // Mana cost (e.g., "{2}{R}{R}")
   imageUrl: string;   // URL to the card image
-  selected?: boolean; // Optional prop to track if the card is selected
 }

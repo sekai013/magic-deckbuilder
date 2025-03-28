@@ -28,15 +28,9 @@ export function updateDeckCards(cards: Card[]) {
  */
 export async function addCardToDeck(card: Card): Promise<void> {
   if (card) {
-    // Create a deep copy of the card to avoid reference issues
-    const cardCopy: Card = {
-      ...card,
-      selected: false // Ensure selected is false for the new card
-    };
-    
     // Get current deck cards and add the new card
     const currentDeckCards = getDeckCards();
-    const updatedDeckCards = [...currentDeckCards, cardCopy];
+    const updatedDeckCards = [...currentDeckCards, card];
     
     // Update the deck state
     updateDeckCards(updatedDeckCards);

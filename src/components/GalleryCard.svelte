@@ -20,7 +20,6 @@
 
 <div 
   class="card" 
-  class:selected={card.selected}
   on:click={handleCardClick}
   on:keydown={handleKeyPress}
   role="button"
@@ -60,10 +59,6 @@
     transform: translateY(-5px) scale(1.02);
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
     outline: none; /* Remove default focus outline */
-  }
-  
-  .card.selected {
-    box-shadow: 0 0 0 3px #4299e1, 0 5px 15px rgba(0, 0, 0, 0.3);
   }
   
   .card-inner {

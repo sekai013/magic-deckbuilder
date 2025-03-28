@@ -9,28 +9,24 @@ const initialDeckCards: Card[] = [
     name: 'Lightning Bolt',
     manaCost: '{R}',
     imageUrl: 'https://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=442125&type=card',
-    selected: false
   },
   {
     id: '2',
     name: 'Lightning Bolt',
     manaCost: '{R}',
     imageUrl: 'https://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=442125&type=card',
-    selected: false
   },
   {
     id: '2',
     name: 'Lightning Bolt',
     manaCost: '{R}',
     imageUrl: 'https://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=442125&type=card',
-    selected: false
   },
   {
     id: '2',
     name: 'Lightning Bolt',
     manaCost: '{R}',
     imageUrl: 'https://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=442125&type=card',
-    selected: false
   },
   // 2 copies of Counterspell
   {
@@ -38,14 +34,12 @@ const initialDeckCards: Card[] = [
     name: 'Counterspell',
     manaCost: '{U}{U}',
     imageUrl: 'https://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=413585&type=card',
-    selected: false
   },
   {
     id: '3',
     name: 'Counterspell',
     manaCost: '{U}{U}',
     imageUrl: 'https://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=413585&type=card',
-    selected: false
   },
   // 1 copy of Wrath of God
   {
@@ -53,7 +47,6 @@ const initialDeckCards: Card[] = [
     name: 'Wrath of God',
     manaCost: '{2}{W}{W}',
     imageUrl: 'https://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=413580&type=card',
-    selected: false
   }
 ];
 

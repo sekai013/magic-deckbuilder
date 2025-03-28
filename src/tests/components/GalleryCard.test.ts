@@ -22,7 +22,6 @@ describe('GalleryCard Component', () => {
     name: 'Black Lotus',
     manaCost: '{0}',
     imageUrl: 'https://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=382866&type=card',
-    selected: false
   };
 
   beforeEach(() => {
@@ -65,38 +64,6 @@ describe('GalleryCard Component', () => {
         expect(stateSvelte.addCardToDeck).toHaveBeenCalledTimes(1);
         expect(stateSvelte.addCardToDeck).toHaveBeenCalledWith(sampleCard);
       });
-    } finally {
-      // Clean up - in Svelte 5, we don't need to call $destroy explicitly
-      // The component will be garbage collected when the container is removed
-      container.remove();
-    }
-  });
-
-  it('should apply selected class when card is selected', () => {
-    // Skip this test if we're in a server environment
-    if (typeof window === 'undefined') {
-      return;
-    }
-    
-    const selectedCard = { ...sampleCard, selected: true };
-    
-    // Create a container for the component
-    const container = document.createElement('div');
-    document.body.appendChild(container);
-    
-    // Mount the component
-    mount(GalleryCard, {
-      target: container,
-      props: { card: selectedCard }
-    });
-    
-    try {
-      // Find the card element
-      const cardElement = container.querySelector('.card');
-      expect(cardElement).not.toBeNull();
-      
-      // Check if it has the selected class
-      expect(cardElement?.classList.contains('selected')).toBe(true);
     } finally {
       // Clean up - in Svelte 5, we don't need to call $destroy explicitly
       // The component will be garbage collected when the container is removed

@@ -43,7 +43,6 @@ describe('Deck Static Adapter', () => {
       expect(card).toHaveProperty('name');
       expect(card).toHaveProperty('manaCost');
       expect(card).toHaveProperty('imageUrl');
-      expect(card).toHaveProperty('selected');
     });
   });
 
@@ -62,17 +61,6 @@ describe('Deck Static Adapter', () => {
     expect(cardCounts['2']).toBe(4); // 4 Lightning Bolts
     expect(cardCounts['3']).toBe(2); // 2 Counterspells
     expect(cardCounts['4']).toBe(1); // 1 Wrath of God
-  });
-
-  it('should set selected property to false for all cards', async () => {
-    // Load deck cards
-    await loadDeckCards();
-    
-    // Verify all cards have selected set to false
-    const deckCards = getDeckCards();
-    deckCards.forEach(card => {
-      expect(card.selected).toBe(false);
-    });
   });
 
   it('should load cards with correct data', async () => {

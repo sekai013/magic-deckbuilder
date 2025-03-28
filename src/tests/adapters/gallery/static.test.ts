@@ -43,7 +43,6 @@ describe('Gallery Static Adapter', () => {
       expect(card).toHaveProperty('name');
       expect(card).toHaveProperty('manaCost');
       expect(card).toHaveProperty('imageUrl');
-      expect(card).toHaveProperty('selected');
     });
   });
 
@@ -77,16 +76,5 @@ describe('Gallery Static Adapter', () => {
     expect(wrathOfGod).toBeDefined();
     expect(wrathOfGod?.name).toBe('Wrath of God');
     expect(wrathOfGod?.manaCost).toBe('{2}{W}{W}');
-  });
-
-  it('should set selected property to false for all cards', async () => {
-    // Load gallery cards
-    await loadGalleryCards();
-    
-    // Verify all cards have selected set to false
-    const galleryCards = getGalleryCards();
-    galleryCards.forEach(card => {
-      expect(card.selected).toBe(false);
-    });
   });
 });
