@@ -33,11 +33,6 @@ describe('GalleryCard Component', () => {
   });
 
   it('should call addCardToDeck when clicked', async () => {
-    // Skip this test if we're in a server environment
-    if (typeof window === 'undefined') {
-      return;
-    }
-    
     // Create a container for the component
     const container = document.createElement('div');
     document.body.appendChild(container);

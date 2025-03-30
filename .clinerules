@@ -1,5 +1,11 @@
-follow these principals.
+# follow these principals.
 
 - Test-Driven Development
 - Domain-Driven Development
 - Functional Programming
+
+# write component tests
+
+- before each test, use `mount()` and `vi.mock()`
+- after each test, use `unmount()` and `vi.clearAllMocks()`
+- mount target component to `document.body`

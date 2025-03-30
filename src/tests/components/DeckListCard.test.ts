@@ -33,11 +33,6 @@ describe('DeckListCard Component', () => {
   });
 
   it('should call removeCardFromDeck when clicked', async () => {
-    // Skip this test if we're in a server environment
-    if (typeof window === 'undefined') {
-      return;
-    }
-    
     // Create a container for the component
     const container = document.createElement('div');
     document.body.appendChild(container);
@@ -74,12 +69,7 @@ describe('DeckListCard Component', () => {
     }
   });
 
-  it('should display the correct card count and name', () => {
-    // Skip this test if we're in a server environment
-    if (typeof window === 'undefined') {
-      return;
-    }
-    
+  it('should display the correct card count and name', () => {    
     // Create a container for the component
     const container = document.createElement('div');
     document.body.appendChild(container);

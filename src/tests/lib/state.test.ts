@@ -1,6 +1,22 @@
 import { describe, it, expect, beforeEach, beforeAll, afterEach } from 'vitest';
-import { getGalleryCards, getDeckCards, updateGalleryCards, updateDeckCards, addCardToDeck, removeCardFromDeck } from '../../lib/state.svelte';
+import {
+  getGalleryCards,
+  getDeckCards,
+  updateGalleryCards,
+  updateDeckCards,
+  addCardToDeck,
+  removeCardFromDeck,
+  getManaValueFilter,
+  updateManaValueFilter,
+  toggleManaValueCondition,
+  selectAllManaValueConditions,
+  clearAllManaValueConditions,
+  isManaValueConditionSelected,
+  hasSelectedManaValueConditions
+} from '../../lib/state.svelte';
 import type { Card } from '../../lib/types';
+import { ManaValueConditions, createManaValueFilter } from '../../lib/manaValueFilter';
+import type { ManaValueCondition } from '../../lib/manaValueFilter';
 
 describe('State', () => {
   // Sample cards for testing
@@ -385,6 +401,149 @@ describe('State', () => {
       const remainingCount = updatedDeck.filter(card => card.id === '5').length;
       expect(remainingCount).toBe(initialCount - 1); // Should have 2 copies remaining
       expect(updatedDeck.length).toBe(initialDeck.length - 1);
+    });
+  });
+
+  describe('ManaValueFilter', () => {
+    // Save original mana value filter to restore after tests
+    let originalManaValueFilter: ReturnType<typeof getManaValueFilter>;
+
+    beforeEach(() => {
+      // Store original state
+      originalManaValueFilter = getManaValueFilter();
+      
+      // Reset mana value filter to empty
+      clearAllManaValueConditions();
+    });
+
+    afterEach(() => {
+      // Restore original state
+      updateManaValueFilter(originalManaValueFilter);
+    });
+
+    describe('getManaValueFilter', () => {
+      it('should return a ManaValueFilter object', () => {
+        const filter = getManaValueFilter();
+        expect(filter).toBeDefined();
+        expect(filter.conditions).toBeDefined();
+        expect(filter.conditions instanceof Set).toBe(true);
+      });
+    });
+
+    describe('updateManaValueFilter', () => {
+      it('should update the mana value filter state', () => {
+        // Create a new filter with some conditions
+        const newFilter = createManaValueFilter(
+          ManaValueConditions.EqualToZero,
+          ManaValueConditions.EqualToThree
+        );
+        
+        // Update the state
+        updateManaValueFilter(newFilter);
+        
+        // Check that the state was updated
+        const updatedFilter = getManaValueFilter();
+        expect(updatedFilter).toEqual(newFilter);
+        expect(isManaValueConditionSelected(ManaValueConditions.EqualToZero)).toBe(true);
+        expect(isManaValueConditionSelected(ManaValueConditions.EqualToThree)).toBe(true);
+        expect(isManaValueConditionSelected(ManaValueConditions.EqualToOne)).toBe(false);
+      });
+    });
+
+    describe('toggleManaValueCondition', () => {
+      it('should add a condition when it is not selected', () => {
+        // Verify condition is not selected initially
+        expect(isManaValueConditionSelected(ManaValueConditions.EqualToTwo)).toBe(false);
+        
+        // Toggle the condition
+        toggleManaValueCondition(ManaValueConditions.EqualToTwo);
+        
+        // Verify condition is now selected
+        expect(isManaValueConditionSelected(ManaValueConditions.EqualToTwo)).toBe(true);
+      });
+
+      it('should remove a condition when it is already selected', () => {
+        // Add a condition first
+        toggleManaValueCondition(ManaValueConditions.EqualToFour);
+        
+        // Verify condition is selected
+        expect(isManaValueConditionSelected(ManaValueConditions.EqualToFour)).toBe(true);
+        
+        // Toggle the condition again
+        toggleManaValueCondition(ManaValueConditions.EqualToFour);
+        
+        // Verify condition is no longer selected
+        expect(isManaValueConditionSelected(ManaValueConditions.EqualToFour)).toBe(false);
+      });
+    });
+
+    describe('selectAllManaValueConditions', () => {
+      it('should select all mana value conditions', () => {
+        // Verify no conditions are selected initially
+        expect(hasSelectedManaValueConditions()).toBe(false);
+        
+        // Select all conditions
+        selectAllManaValueConditions();
+        
+        // Verify all conditions are selected
+        expect(isManaValueConditionSelected(ManaValueConditions.EqualToZero)).toBe(true);
+        expect(isManaValueConditionSelected(ManaValueConditions.EqualToOne)).toBe(true);
+        expect(isManaValueConditionSelected(ManaValueConditions.EqualToTwo)).toBe(true);
+        expect(isManaValueConditionSelected(ManaValueConditions.EqualToThree)).toBe(true);
+        expect(isManaValueConditionSelected(ManaValueConditions.EqualToFour)).toBe(true);
+        expect(isManaValueConditionSelected(ManaValueConditions.EqualToFive)).toBe(true);
+        expect(isManaValueConditionSelected(ManaValueConditions.EqualToSix)).toBe(true);
+        expect(isManaValueConditionSelected(ManaValueConditions.GreaterThanOrEqualToSeven)).toBe(true);
+      });
+    });
+
+    describe('clearAllManaValueConditions', () => {
+      it('should clear all mana value conditions', () => {
+        // Select all conditions first
+        selectAllManaValueConditions();
+        
+        // Verify conditions are selected
+        expect(hasSelectedManaValueConditions()).toBe(true);
+        
+        // Clear all conditions
+        clearAllManaValueConditions();
+        
+        // Verify no conditions are selected
+        expect(hasSelectedManaValueConditions()).toBe(false);
+        expect(isManaValueConditionSelected(ManaValueConditions.EqualToZero)).toBe(false);
+        expect(isManaValueConditionSelected(ManaValueConditions.EqualToOne)).toBe(false);
+        // ... and so on for other conditions
+      });
+    });
+
+    describe('isManaValueConditionSelected', () => {
+      it('should return true when a condition is selected', () => {
+        // Add a condition
+        toggleManaValueCondition(ManaValueConditions.EqualToSix);
+        
+        // Verify the condition is selected
+        expect(isManaValueConditionSelected(ManaValueConditions.EqualToSix)).toBe(true);
+      });
+
+      it('should return false when a condition is not selected', () => {
+        // Verify a condition that hasn't been added is not selected
+        expect(isManaValueConditionSelected(ManaValueConditions.EqualToOne)).toBe(false);
+      });
+    });
+
+    describe('hasSelectedManaValueConditions', () => {
+      it('should return true when at least one condition is selected', () => {
+        // Add a condition
+        toggleManaValueCondition(ManaValueConditions.GreaterThanOrEqualToSeven);
+        
+        // Verify there are selected conditions
+        expect(hasSelectedManaValueConditions()).toBe(true);
+      });
+
+      it('should return false when no conditions are selected', () => {
+        // Verify there are no selected conditions initially
+        expect(hasSelectedManaValueConditions()).toBe(false);
+      });
     });
   });
 });
