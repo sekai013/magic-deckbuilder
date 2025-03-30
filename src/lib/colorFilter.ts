@@ -1,8 +1,8 @@
 import { Colorless, type Multicolor, type SingleColor, createMulticolor } from "./colors";
 
-type FilterType = Branded<"Exact" | "AtLeast" | "AtMost">;
+export type FilterType = Branded<"Exact" | "AtLeast" | "AtMost">;
 
-export const FilterType = {
+export const FilterTypes = {
   Exact: "Exact" as FilterType,
   AtLeast: "AtLeast" as FilterType,
   AtMost: "AtMost" as FilterType,
@@ -97,5 +97,12 @@ export function select(filter: ColorFilter, value: Colorless | SingleColor): Col
   return {
     type: filterType,
     value: { colors }
+  };
+}
+
+export function changeType(filter: ColorFilter, newType: FilterType): ColorFilter {
+  return {
+    ...filter,
+    type: newType,
   };
 }

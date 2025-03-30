@@ -1,10 +1,10 @@
 import { describe, it, expect } from 'vitest';
-import { FilterType, select, type ColorFilter, type NoColorFilter } from '../../lib/colorFilter';
+import { changeType, FilterTypes, select, type ColorFilter, type NoColorFilter } from '../../lib/colorFilter';
 import { Colorless, Colors, createMulticolor } from '../../lib/colors';
 
 describe('select function', () => {
   // Array of all filter types to test
-  const filterTypes = [FilterType.Exact, FilterType.AtLeast, FilterType.AtMost];
+  const filterTypes = Object.values(FilterTypes);
 
   // Test creating a new filter when selecting a color with no filter
   filterTypes.forEach(filterType => {
@@ -208,6 +208,27 @@ describe('select function', () => {
       expect(result).toEqual({
         type: filterType,
         value: Colors.White
+      });
+    });
+  });
+});
+
+describe('changeType function', () => {
+  const originalTypes = Object.values(FilterTypes);
+  const targetTypes = Object.values(FilterTypes);
+
+  originalTypes.forEach((originalType) => {
+    targetTypes.forEach((targetType) => {
+      it(`should change ${originalType} to ${targetType}`, () => {
+        const filter = {
+          type: originalType,
+        };
+
+        const result = changeType(filter, targetType);
+
+        expect(result).toEqual({
+          type: targetType,
+        });
       });
     });
   });

@@ -20,3 +20,4 @@
 
 - do not execute dev command
 - use pnpm instead of npm
+- if user says "define something", just define it. do not have to use it yet.
