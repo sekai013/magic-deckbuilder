@@ -4,8 +4,19 @@
 - Domain-Driven Development
 - Functional Programming
 
-# write component tests
+# write tests of svelte components
 
 - before each test, use `mount()` and `vi.mock()`
 - after each test, use `unmount()` and `vi.clearAllMocks()`
 - mount target component to `document.body`
+- if user says "write tests", then write tests to be. test will fail, but ok. do not edit the target.
+
+# write tests of others
+
+- if user says "write tests", then write tests to be. test will fail, but ok. do not edit the target.
+
+
+# other instructions
+
+- do not execute dev command
+- use pnpm instead of npm

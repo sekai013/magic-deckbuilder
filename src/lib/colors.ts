@@ -13,5 +13,11 @@ export const Colors = {
 };
 
 export type Multicolor = {
-  readonly colors: [SingleColor, SingleColor, ...SingleColor[]];
+  readonly colors: ReadonlySet<SingleColor>;
+}
+
+export function createMulticolor(color1: SingleColor, color2: SingleColor, ...colors: SingleColor[]): Multicolor {
+  return {
+    colors: [color1, color2, ...colors].reduce((set, color) => set.add(color), new Set<SingleColor>()),
+  };
 }
