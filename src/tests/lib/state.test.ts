@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, beforeAll, afterEach } from 'vitest';
-import { getGalleryCards, getDeckCards, updateGalleryCards, updateDeckCards, addCardToDeck } from '../../lib/state.svelte';
+import { getGalleryCards, getDeckCards, updateGalleryCards, updateDeckCards, addCardToDeck, removeCardFromDeck } from '../../lib/state.svelte';
 import type { Card } from '../../lib/types';
 
 describe('State', () => {
@@ -272,6 +272,119 @@ describe('State', () => {
       
       // Verify deck is still empty
       expect(getDeckCards().length).toBe(0);
+    });
+  });
+
+  describe('removeCardFromDeck', () => {
+    it('should remove a card from the deck when given a card ID', async () => {
+      // Reset deck cards to initial state
+      updateDeckCards([...initialDeckCards]);
+      
+      // Verify initial deck state
+      const initialLength = getDeckCards().length;
+      expect(initialLength).toBe(initialDeckCards.length);
+      
+      // Get a card from the deck
+      const cardToRemove = getDeckCards()[0];
+      expect(cardToRemove).toBeDefined();
+      
+      // Remove the card from the deck using its ID
+      await removeCardFromDeck(cardToRemove.id);
+      
+      // Verify card was removed from the deck
+      const deckCards = getDeckCards();
+      expect(deckCards.length).toBe(initialLength - 1);
+      
+      // Verify the card is no longer in the deck
+      const removedCard = deckCards.find(card => card.id === cardToRemove.id);
+      expect(removedCard).toBeUndefined();
+    });
+
+    it('should remove a card from the deck when given a card ID', async () => {
+      // Reset deck cards to initial state
+      updateDeckCards([...initialDeckCards]);
+      
+      // Verify initial deck state
+      const initialLength = getDeckCards().length;
+      
+      // Get a card ID from the deck
+      const cardIdToRemove = getDeckCards()[0].id;
+      
+      // Remove the card from the deck by ID
+      await removeCardFromDeck(cardIdToRemove);
+      
+      // Verify card was removed from the deck
+      const deckCards = getDeckCards();
+      expect(deckCards.length).toBe(initialLength - 1);
+      
+      // Verify the card is no longer in the deck
+      const removedCard = deckCards.find(card => card.id === cardIdToRemove);
+      expect(removedCard).toBeUndefined();
+    });
+
+    it('should do nothing if the card does not exist in the deck', async () => {
+      // Reset deck cards to initial state
+      updateDeckCards([...initialDeckCards]);
+      
+      // Verify initial deck state
+      const initialLength = getDeckCards().length;
+      
+      // Use a non-existent card ID
+      const nonExistentCardId = 'non-existent-id';
+      
+      // Try to remove the non-existent card
+      await removeCardFromDeck(nonExistentCardId);
+      
+      // Verify deck is unchanged
+      expect(getDeckCards().length).toBe(initialLength);
+    });
+
+    it('should do nothing if null is passed', async () => {
+      // Reset deck cards to initial state
+      updateDeckCards([...initialDeckCards]);
+      
+      // Verify initial deck state
+      const initialLength = getDeckCards().length;
+      
+      // Try to remove with a null ID
+      await removeCardFromDeck(null as unknown as string);
+      
+      // Verify deck is unchanged
+      expect(getDeckCards().length).toBe(initialLength);
+    });
+
+    it('should remove only one copy of a card when multiple copies exist', async () => {
+      // Create a deck with multiple copies of the same card
+      const cardWithMultipleCopies: Card = {
+        id: '5',
+        name: 'Lightning Bolt',
+        manaCost: '{R}',
+        imageUrl: 'https://gatherer.wizards.com/Handlers/Image.ashx?multiverseid=442125&type=card',
+      };
+      
+      const deckWithDuplicates = [
+        cardWithMultipleCopies, // First copy
+        cardWithMultipleCopies, // Second copy
+        cardWithMultipleCopies, // Third copy
+        ...initialDeckCards
+      ];
+      
+      // Set up the deck with duplicates
+      updateDeckCards(deckWithDuplicates);
+      
+      // Verify initial state
+      const initialDeck = getDeckCards();
+      const initialCount = initialDeck.filter(card => card.id === '5').length;
+      expect(initialCount).toBe(3); // Should have 3 copies initially
+      
+      // Remove one copy of the card using its ID
+      await removeCardFromDeck('5');
+      
+      // Verify that only one copy was removed
+      const updatedDeck = getDeckCards();
+      const remainingCount = updatedDeck.filter(card => card.id === '5').length;
+      expect(remainingCount).toBe(initialCount - 1); // Should have 2 copies remaining
+      expect(updatedDeck.length).toBe(initialDeck.length - 1);
     });
   });
 });
