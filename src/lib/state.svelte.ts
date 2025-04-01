@@ -44,3 +44,15 @@ export {
   clearSelectedFormat,
   isFormatSelected
 } from './format.svelte';
+
+// Format filter state
+export {
+  getFormatFilter,
+  updateFormatFilter,
+  toggleFormat,
+  clearFormatFilter,
+  isFormatSelectedInFilter,
+  hasSelectedFormat,
+  selectSingleFormat,
+  getSelectedFormatFromFilter
+} from './formatFilter.svelte';

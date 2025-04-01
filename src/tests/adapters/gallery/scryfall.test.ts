@@ -5,13 +5,16 @@ import type { Card } from '../../../lib/types';
 import { FilterTypes, type ColorFilter } from '../../../lib/colorFilter';
 import { Colors, Colorless } from '../../../lib/colors';
 import { createManaValueFilter, ManaValueConditions, type ManaValueFilter } from '../../../lib/manaValueFilter';
+import { Formats } from '../../../lib/format';
+import type { FormatFilter, SingleFormatFilter, NoFormatFilter } from '../../../lib/formatFilter';
 
 // Mock the state functions
 vi.mock('../../../lib/state.svelte', () => ({
   getGalleryCards: vi.fn(() => []),
   updateGalleryCards: vi.fn(),
   getColorFilter: vi.fn(() => ({ type: FilterTypes.Exact })),
-  getManaValueFilter: vi.fn(() => createManaValueFilter())
+  getManaValueFilter: vi.fn(() => createManaValueFilter()),
+  getFormatFilter: vi.fn(() => ({ _type: 'NoFormatFilter' } as NoFormatFilter))
 }));
 
 // Mock the fetch function
@@ -56,7 +59,7 @@ describe('Scryfall Gallery Adapter', () => {
 
   it('should fetch cards from Scryfall API', async () => {
     // Call the adapter function
-    await loadGalleryCards({} as any, {} as any);
+    await loadGalleryCards({} as any, {} as any, {} as any);
     
     // Verify fetch was called
     expect(mockFetch).toHaveBeenCalled();
@@ -68,7 +71,7 @@ describe('Scryfall Gallery Adapter', () => {
 
   it('should update gallery cards with transformed Scryfall data', async () => {
     // Call the adapter function
-    await loadGalleryCards({} as any, {} as any);
+    await loadGalleryCards({} as any, {} as any, {} as any);
     
     // Verify updateGalleryCards was called with the transformed data
     expect(state.updateGalleryCards).toHaveBeenCalled();
@@ -98,7 +101,7 @@ describe('Scryfall Gallery Adapter', () => {
     });
     
     // Call the adapter function and expect it to not throw
-    await expect(loadGalleryCards({} as any, {} as any)).resolves.not.toThrow();
+    await expect(loadGalleryCards({} as any, {} as any, {} as any)).resolves.not.toThrow();
     
     // Verify updateGalleryCards was not called or was called with empty array
     expect(state.updateGalleryCards).not.toHaveBeenCalled();
@@ -115,7 +118,7 @@ describe('Scryfall Gallery Adapter', () => {
     vi.mocked(state.getColorFilter).mockReturnValue(colorFilter);
     
     // Call the adapter function with the mocked filter
-    await loadGalleryCards(colorFilter, {} as any);
+    await loadGalleryCards(colorFilter, {} as any, {} as any);
     
     // Verify the query includes color parameters
     const fetchUrl = mockFetch.mock.calls[0][0];
@@ -133,11 +136,29 @@ describe('Scryfall Gallery Adapter', () => {
     vi.mocked(state.getManaValueFilter).mockReturnValue(manaValueFilter);
     
     // Call the adapter function with the mocked filter
-    await loadGalleryCards({} as any, manaValueFilter);
+    await loadGalleryCards({} as any, manaValueFilter, {} as any);
     
     // Verify the query includes mana value parameters
     const fetchUrl = mockFetch.mock.calls[0][0];
     expect(fetchUrl).toContain('(cmc%3D2%20OR%20cmc%3D3)');
+  });
+
+  it('should construct query with format filter parameters', async () => {
+    // Setup a format filter with Standard format
+    const formatFilter: SingleFormatFilter = {
+      _type: 'SingleFormatFilter',
+      format: Formats.Standard
+    };
+    
+    // Mock getFormatFilter to return our test filter
+    vi.mocked(state.getFormatFilter).mockReturnValue(formatFilter);
+    
+    // Call the adapter function with the mocked filter
+    await loadGalleryCards({} as any, {} as any, formatFilter);
+    
+    // Verify the query includes format parameters
+    const fetchUrl = mockFetch.mock.calls[0][0];
+    expect(fetchUrl).toContain('f%3Astandard');
   });
 
   it('should handle cards with double-faced layouts', async () => {
@@ -176,7 +197,7 @@ describe('Scryfall Gallery Adapter', () => {
     });
     
     // Call the adapter function
-    await loadGalleryCards({} as any, {} as any);
+    await loadGalleryCards({} as any, {} as any, {} as any);
     
     // Get the argument passed to updateGalleryCards
     const updateCall = vi.mocked(state.updateGalleryCards).mock.calls[0][0];
@@ -213,7 +234,7 @@ describe('Scryfall Gallery Adapter', () => {
     });
     
     // Call the adapter function
-    await loadGalleryCards({} as any, {} as any);
+    await loadGalleryCards({} as any, {} as any, {} as any);
     
     // Verify fetch was called only once
     expect(mockFetch).toHaveBeenCalledTimes(1);
@@ -229,5 +250,36 @@ describe('Scryfall Gallery Adapter', () => {
     // Verify only the first page of cards was processed
     expect(updateCall.length).toBe(1);
     expect(updateCall[0]).toHaveProperty('id', 'page1-id-1');
+  });
+
+  it('should combine multiple filters in the query', async () => {
+    // Setup filters
+    const colorFilter = {
+      type: FilterTypes.Exact,
+      value: Colors.Red
+    };
+    
+    const manaValueFilter = createManaValueFilter(
+      ManaValueConditions.EqualToOne
+    );
+    
+    const formatFilter: SingleFormatFilter = {
+      _type: 'SingleFormatFilter',
+      format: Formats.Modern
+    };
+    
+    // Mock state functions to return our test filters
+    vi.mocked(state.getColorFilter).mockReturnValue(colorFilter);
+    vi.mocked(state.getManaValueFilter).mockReturnValue(manaValueFilter);
+    vi.mocked(state.getFormatFilter).mockReturnValue(formatFilter);
+    
+    // Call the adapter function with all filters
+    await loadGalleryCards(colorFilter, manaValueFilter, formatFilter);
+    
+    // Verify the query includes all filter parameters
+    const fetchUrl = mockFetch.mock.calls[0][0];
+    expect(fetchUrl).toContain('id%3Ar');
+    expect(fetchUrl).toContain('cmc%3D1');
+    expect(fetchUrl).toContain('f%3Amodern');
   });
 });

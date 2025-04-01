@@ -2,6 +2,7 @@
   import ColorFilter from './ColorFilter.svelte';
   import ManaValueFilter from './ManaValueFilter.svelte';
   import TextFilter from './TextFilter.svelte';
+  import FormatFilter from './FormatFilter.svelte';
   
   // Define props
   export let searchText: string = '';
@@ -13,6 +14,7 @@
   <div class="filter-layout">
     <ColorFilter />
     <ManaValueFilter />
+    <FormatFilter />
     <TextFilter bind:searchText />
   </div>
 </div>

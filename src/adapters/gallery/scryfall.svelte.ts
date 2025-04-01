@@ -1,19 +1,27 @@
-import { updateGalleryCards, getColorFilter, getManaValueFilter } from "../../lib/state.svelte";
+import { updateGalleryCards, getColorFilter, getManaValueFilter, getFormatFilter } from "../../lib/state.svelte";
 import type { Card } from "../../lib/types";
 import { FilterTypes, type ColorFilter } from "../../lib/colorFilter";
-import { Colors, Colorless } from "../../lib/colors";
+import { Colors, Colorless, type SingleColor } from "../../lib/colors";
 import { ManaValueConditions, type ManaValueFilter } from "../../lib/manaValueFilter";
+import type { FormatFilter } from "../../lib/formatFilter";
+import type { Format } from "../../lib/format";
 
 /**
  * Loads gallery cards from the Scryfall API based on the current filters
  * @param colorFilter The color filter component
  * @param manaValueFilter The mana value filter component
+ * @param formatFilter The format filter component
  */
-export async function loadGalleryCards(colorFilter?: ColorFilter, manaValueFilter?: ManaValueFilter) {
+export async function loadGalleryCards(
+  colorFilter?: ColorFilter, 
+  manaValueFilter?: ManaValueFilter,
+  formatFilter?: FormatFilter
+) {
   try {
     // Use the passed filter objects or get them from state if not provided
     const currentColorFilter = colorFilter || getColorFilter();
     const currentManaValueFilter = manaValueFilter || getManaValueFilter();
+    const currentFormatFilter = formatFilter || getFormatFilter();
     
     // Build the query string
     let query = "";
@@ -46,7 +54,7 @@ export async function loadGalleryCards(colorFilter?: ColorFilter, manaValueFilte
       } else {
         // For multicolor, join all colors
         const colors = Array.from(value.colors)
-          .map(c => c.toLowerCase())
+          .map((c: SingleColor) => c.toLowerCase())
           .join("");
         colorQuery += colors;
       }
@@ -78,6 +86,17 @@ export async function loadGalleryCards(colorFilter?: ColorFilter, manaValueFilte
       if (currentManaValueFilter.conditions.size > 1) {
         query += ")";
       }
+    }
+    
+    // Add format filter to query
+    if (currentFormatFilter && currentFormatFilter._type === 'SingleFormatFilter') {
+      if (query) query += " ";
+      
+      // Get the format value and convert to lowercase for Scryfall query
+      const format = currentFormatFilter.format.toLowerCase();
+      
+      // Add format to query
+      query += `f:${format}`;
     }
     
     // If no filters are applied, use a default query to get some cards
