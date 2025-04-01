@@ -52,21 +52,23 @@
 <style>
   .card {
     position: relative;
-    width: 200px;
-    height: 280px;
-    border-radius: 10px;
+    width: 170px;
+    height: 235px;
+    border-radius: 8px;
     overflow: hidden;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
     transition: transform 0.2s ease, box-shadow 0.2s ease;
     background-color: #000;
     user-select: none;
-    cursor: pointer; /* Add cursor pointer to indicate clickable */
+    cursor: pointer;
+    margin: 0 auto; /* Center card in its container */
   }
   
   .card:hover, .card:focus {
-    transform: translateY(-5px) scale(1.02);
+    transform: scale(1.05);
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
     outline: none; /* Remove default focus outline */
+    z-index: 1; /* Ensure hovered card appears above others */
   }
   
   .card-inner {
@@ -129,12 +131,27 @@
   /* Responsive adjustments */
   @media (max-width: 768px) {
     .card {
-      width: 160px;
-      height: 224px;
+      width: 130px;
+      height: 180px;
     }
     
     .card-name, .card-mana-cost {
-      font-size: 12px;
+      font-size: 11px;
+    }
+    
+    .card-info {
+      padding: 4px;
+    }
+  }
+  
+  /* Dark mode support */
+  @media (prefers-color-scheme: dark) {
+    .card {
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+    }
+    
+    .card:hover, .card:focus {
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
     }
   }
 </style>

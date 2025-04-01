@@ -12,30 +12,15 @@
   let searchText = '';
 </script>
 
-<div class="deck-builder">
-  <div class="deck-builder-header">
-    <h1>Magic: The Gathering Deckbuilder</h1>
-  </div>
-  
+<div class="deck-builder">  
   <div class="deck-builder-content">
     <section class="gallery-section">
-      <h2>Card Gallery</h2>
-      <p>Browse through the collection of Magic: The Gathering cards.</p>
-      
-      <div class="stats">
-        <p>Total Cards: {galleryCards.length}</p>
-        <p>Selected Cards: {galleryCards.filter(card => card.selected).length}</p>
-      </div>
-      
       <Gallery cards={galleryCards} />
       
       <Filter bind:searchText />
     </section>
     
-    <section class="deck-section">
-      <h2>Your Deck</h2>
-      <p>Cards in your current deck.</p>
-      
+    <section class="deck-section">      
       <DeckList cards={deckCards} />
     </section>
   </div>
@@ -46,44 +31,29 @@
     width: 100%;
     max-width: 1200px;
     margin: 0 auto;
-    padding: 2rem;
-  }
-
-  .deck-builder-header {
-    margin-bottom: 2rem;
-    text-align: center;
-  }
-
-  .deck-builder-header h1 {
-    font-size: 2.5rem;
-    color: #333;
-    margin: 0;
+    padding: 1rem;
   }
 
   .deck-builder-content {
     display: grid;
     grid-template-columns: 1fr 300px;
-    gap: 2rem;
+    gap: 1rem;
+    align-items: start; /* Align items to the top */
   }
 
-  .gallery-section, .deck-section {
-    margin-bottom: 2rem;
-  }
-
-  h2 {
-    font-size: 1.8rem;
+  .gallery-section {
+    padding-right: 0.5rem;
     margin-bottom: 1rem;
-    color: #444;
+    max-width: 100%;
+    overflow-x: hidden; /* Prevent horizontal overflow at container level */
   }
-
-  .stats {
-    display: flex;
-    justify-content: space-between;
-    margin: 1rem 0;
-    background-color: #f0f0f0;
-    padding: 0.75rem 1.5rem;
-    border-radius: 8px;
-    font-weight: 500;
+  
+  .deck-section {
+    margin-bottom: 1rem;
+    position: sticky;
+    top: 0.5rem;
+    max-height: calc(100vh - 120px); /* Slightly increased visible area */
+    overflow-y: auto;
   }
 
   /* Responsive styles */
@@ -91,25 +61,71 @@
     .deck-builder {
       padding: 1rem;
     }
-
-    .deck-builder-header h1 {
-      font-size: 2rem;
-    }
-
+  
     .deck-builder-content {
       grid-template-columns: 1fr;
+      grid-template-rows: auto 1fr;
+      height: auto;
+    }
+    
+    .gallery-section {
+      max-width: 100%;
+      overflow-x: hidden;
+    }
+    
+    .deck-section {
+      position: static; /* Reset position on mobile */
+      max-height: 400px; /* Smaller max height on mobile */
+      overflow-y: auto;
+      margin-top: 2rem;
+      border-top: 1px solid #e2e8f0;
+      padding-top: 1rem;
     }
   }
 
+  /* Scrollbar styling */
+  .gallery-section::-webkit-scrollbar,
+  .deck-section::-webkit-scrollbar {
+    width: 8px;
+  }
+  
+  .gallery-section::-webkit-scrollbar-track,
+  .deck-section::-webkit-scrollbar-track {
+    background: #f0f0f0;
+    border-radius: 4px;
+  }
+  
+  .gallery-section::-webkit-scrollbar-thumb,
+  .deck-section::-webkit-scrollbar-thumb {
+    background-color: #4299e1;
+    border-radius: 4px;
+  }
+  
+  .gallery-section,
+  .deck-section {
+    scrollbar-width: thin;
+    scrollbar-color: #4299e1 #f0f0f0;
+  }
+  
   /* Dark mode support */
   @media (prefers-color-scheme: dark) {
-    .deck-builder-header h1, h2 {
-      color: #f0f0f0;
+    .deck-section {
+      border-top-color: #4a5568;
     }
-
-    .stats {
-      background-color: #3a3a3a;
-      color: #f0f0f0;
+    
+    .gallery-section::-webkit-scrollbar-track,
+    .deck-section::-webkit-scrollbar-track {
+      background: #2d3748;
+    }
+  
+    .gallery-section::-webkit-scrollbar-thumb,
+    .deck-section::-webkit-scrollbar-thumb {
+      background-color: #3182ce;
+    }
+    
+    .gallery-section,
+    .deck-section {
+      scrollbar-color: #3182ce #2d3748;
     }
   }
 </style>
