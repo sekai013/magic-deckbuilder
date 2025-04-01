@@ -9,11 +9,11 @@ import { ManaValueConditions, type ManaValueFilter } from "../../lib/manaValueFi
  * @param colorFilter The color filter component
  * @param manaValueFilter The mana value filter component
  */
-export async function loadGalleryCards(colorFilter: ColorFilter, manaValueFilter: ManaValueFilter) {
+export async function loadGalleryCards(colorFilter?: ColorFilter, manaValueFilter?: ManaValueFilter) {
   try {
-    // Get current filter states
-    const currentColorFilter = getColorFilter();
-    const currentManaValueFilter = getManaValueFilter();
+    // Use the passed filter objects or get them from state if not provided
+    const currentColorFilter = colorFilter || getColorFilter();
+    const currentManaValueFilter = manaValueFilter || getManaValueFilter();
     
     // Build the query string
     let query = "";
@@ -26,13 +26,13 @@ export async function loadGalleryCards(colorFilter: ColorFilter, manaValueFilter
       // Handle different filter types
       switch (filterType) {
         case FilterTypes.Exact:
-          colorQuery = "c:exactly ";
+          colorQuery = "id:";
           break;
         case FilterTypes.AtLeast:
-          colorQuery = "c>= ";
+          colorQuery = "id>=";
           break;
         case FilterTypes.AtMost:
-          colorQuery = "c<= ";
+          colorQuery = "id<=";
           break;
       }
       
@@ -55,7 +55,7 @@ export async function loadGalleryCards(colorFilter: ColorFilter, manaValueFilter
     }
     
     // Add mana value filter to query
-    if (currentManaValueFilter.conditions.size > 0) {
+    if (currentManaValueFilter && currentManaValueFilter.conditions && currentManaValueFilter.conditions.size > 0) {
       if (query) query += " ";
       
       // If there are multiple conditions, group them with OR
@@ -68,7 +68,7 @@ export async function loadGalleryCards(colorFilter: ColorFilter, manaValueFilter
           if (condition === ManaValueConditions.GreaterThanOrEqualToSeven) {
             return "cmc>=7";
           } else {
-            return `cmc:${condition}`;
+            return `cmc=${condition}`;
           }
         })
         .join(" OR ");
@@ -93,6 +93,7 @@ export async function loadGalleryCards(colorFilter: ColorFilter, manaValueFilter
   } catch (error) {
     console.error("Error loading gallery cards from Scryfall:", error);
     // Don't update gallery cards on error
+    return; // Explicitly return to prevent further execution
   }
 };
 

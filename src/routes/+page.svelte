@@ -1,20 +1,53 @@
 <script lang="ts">
   import { onMount } from 'svelte';
   import DeckBuilder from '../components/DeckBuilder.svelte';
-  import { getDeckCards, getGalleryCards } from '$lib/state.svelte'
+  import { getDeckCards, getGalleryCards, getColorFilter, getManaValueFilter } from '$lib/state.svelte'
   import { loadDeckCards } from '../adapters/deck/static.svelte';
   import { loadGalleryCards } from '../adapters/gallery/scryfall.svelte';
+
+  // State for tracking filter changes
+  let previousColorFilter = JSON.stringify(getColorFilter());
+  let previousManaValueFilter = JSON.stringify(getManaValueFilter());
+  let isLoading = false;
 
   // Load deck cards immediately
   loadDeckCards();
   
-  // Load gallery cards on mount
-  onMount(async () => {
+  // Function to load gallery cards
+  async function loadCards() {
+    if (isLoading) return;
+    
     try {
+      isLoading = true;
       // Load cards using the Scryfall adapter
-      await loadGalleryCards({} as any, {} as any);
+      await loadGalleryCards(getColorFilter(), getManaValueFilter());
     } catch (err) {
       console.error('Error loading cards from Scryfall:', err);
+    } finally {
+      isLoading = false;
+    }
+  }
+  
+  // Load gallery cards on mount
+  onMount(() => {
+    loadCards();
+  });
+  
+  // Watch for changes in colorFilter and manaValueFilter
+  $effect(() => {
+    const currentColorFilter = JSON.stringify(getColorFilter());
+    const currentManaValueFilter = JSON.stringify(getManaValueFilter());
+    
+    // Check if filters have changed
+    if (currentColorFilter !== previousColorFilter ||
+        currentManaValueFilter !== previousManaValueFilter) {
+      
+      // Update previous values
+      previousColorFilter = currentColorFilter;
+      previousManaValueFilter = currentManaValueFilter;
+      
+      // Reload cards with new filters
+      loadCards();
     }
   });
 </script>

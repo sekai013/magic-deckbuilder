@@ -114,12 +114,12 @@ describe('Scryfall Gallery Adapter', () => {
     // Mock getColorFilter to return our test filter
     vi.mocked(state.getColorFilter).mockReturnValue(colorFilter);
     
-    // Call the adapter function
-    await loadGalleryCards({} as any, {} as any);
+    // Call the adapter function with the mocked filter
+    await loadGalleryCards(colorFilter, {} as any);
     
     // Verify the query includes color parameters
     const fetchUrl = mockFetch.mock.calls[0][0];
-    expect(fetchUrl).toContain('c%3Aexactly%20wu');
+    expect(fetchUrl).toContain('id%3Awu');
   });
 
   it('should construct query with mana value filter parameters', async () => {
@@ -132,12 +132,12 @@ describe('Scryfall Gallery Adapter', () => {
     // Mock getManaValueFilter to return our test filter
     vi.mocked(state.getManaValueFilter).mockReturnValue(manaValueFilter);
     
-    // Call the adapter function
-    await loadGalleryCards({} as any, {} as any);
+    // Call the adapter function with the mocked filter
+    await loadGalleryCards({} as any, manaValueFilter);
     
     // Verify the query includes mana value parameters
     const fetchUrl = mockFetch.mock.calls[0][0];
-    expect(fetchUrl).toContain('(cmc%3A2%20OR%20cmc%3A3)');
+    expect(fetchUrl).toContain('(cmc%3D2%20OR%20cmc%3D3)');
   });
 
   it('should handle cards with double-faced layouts', async () => {
