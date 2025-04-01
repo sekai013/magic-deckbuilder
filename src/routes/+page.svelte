@@ -1,11 +1,22 @@
 <script lang="ts">
+  import { onMount } from 'svelte';
   import DeckBuilder from '../components/DeckBuilder.svelte';
   import { getDeckCards, getGalleryCards } from '$lib/state.svelte'
   import { loadDeckCards } from '../adapters/deck/static.svelte';
-  import { loadGalleryCards } from '../adapters/gallery/static.svelte';
+  import { loadGalleryCards } from '../adapters/gallery/scryfall.svelte';
 
+  // Load deck cards immediately
   loadDeckCards();
-  loadGalleryCards();
+  
+  // Load gallery cards on mount
+  onMount(async () => {
+    try {
+      // Load cards using the Scryfall adapter
+      await loadGalleryCards({} as any, {} as any);
+    } catch (err) {
+      console.error('Error loading cards from Scryfall:', err);
+    }
+  });
 </script>
 
 <div class="app-container">
