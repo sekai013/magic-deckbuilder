@@ -37,15 +37,7 @@
     <!-- Card image -->
     <div class="card-image-container">
       <img src={card.imageUrl} alt={card.name} class="card-image" />
-    </div>
-    
-    <!-- Card info overlay -->
-    <div class="card-info">
-      <div class="card-header">
-        <h3 class="card-name">{card.name}</h3>
-        <div class="card-mana-cost">{card.manaCost}</div>
-      </div>
-    </div>
+    </div>    
   </div>
 </div>
 
@@ -94,54 +86,12 @@
     transform: scale(1.05);
   }
   
-  .card-info {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    padding: 8px;
-    background: linear-gradient(to bottom, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0) 100%);
-    color: white;
-    z-index: 1;
-  }
-  
-  .card-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-  
-  .card-name {
-    margin: 0;
-    font-size: 14px;
-    font-weight: bold;
-    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    max-width: 70%;
-  }
-  
-  .card-mana-cost {
-    font-size: 14px;
-    font-weight: bold;
-    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
-  }
-  
   /* Responsive adjustments */
   @media (max-width: 768px) {
     .card {
       width: 130px;
       height: 180px;
-    }
-    
-    .card-name, .card-mana-cost {
-      font-size: 11px;
-    }
-    
-    .card-info {
-      padding: 4px;
-    }
+    }    
   }
   
   /* Dark mode support */
