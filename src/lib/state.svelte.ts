@@ -36,3 +36,11 @@ export {
   isSelectedValue,
   isSelectedFilterType
 } from './colorFilter.svelte';
+
+// Format state
+export {
+  getSelectedFormat,
+  setSelectedFormat,
+  clearSelectedFormat,
+  isFormatSelected
+} from './format.svelte';
